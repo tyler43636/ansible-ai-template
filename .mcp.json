@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "ansible": {
+      "command": "ansible-mcp-server",
+      "args": ["--stdio"],
+      "env": {
+        "WORKSPACE_ROOT": "."
+      }
+    }
+  }
+}

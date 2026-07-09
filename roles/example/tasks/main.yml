@@ -1,0 +1,6 @@
+---
+- name: Ensure example package is installed
+  ansible.builtin.apt:
+    name: htop
+    state: present
+    update_cache: yes

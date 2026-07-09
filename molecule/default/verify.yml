@@ -1,0 +1,8 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Check that htop is installed
+      ansible.builtin.command: which htop
+      changed_when: false
