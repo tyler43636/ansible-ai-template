@@ -1,0 +1,12 @@
+---
+# Variables applied to all web servers (both test and prod)
+
+# Packages specific to the web tier
+example_package: nginx
+
+# Application configuration
+app_port: 80
+app_protocol: http
+
+# Feature flags for the web tier
+enable_caching: true

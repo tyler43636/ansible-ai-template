@@ -1,5 +1,5 @@
 ---
-- hosts: example-group
+- hosts: web
   become: true
   roles:
     - example

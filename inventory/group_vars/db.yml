@@ -1,0 +1,10 @@
+---
+# Variables applied to all database servers
+
+# Packages specific to the database tier
+example_package: postgresql
+
+# Database configuration
+db_port: 5432
+db_engine: postgres
+max_connections: 100

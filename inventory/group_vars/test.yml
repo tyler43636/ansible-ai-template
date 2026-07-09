@@ -1,0 +1,8 @@
+---
+# Variables applied to the test environment
+
+environment_tier: test
+debug_mode: true
+
+# Use smaller resource limits for test
+max_connections: 50
