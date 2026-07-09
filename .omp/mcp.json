@@ -1,11 +1,32 @@
 {
   "$schema": "https://raw.githubusercontent.com/can1357/oh-my-pi/main/packages/coding-agent/src/config/mcp-schema.json",
   "mcpServers": {
+    "ansible": {
       "command": "npx",
-      "args": ["-y", "@ansible/ansible-mcp-server", "--stdio"],
+      "args": [
+        "-y",
+        "@ansible/ansible-mcp-server",
+        "--stdio"
+      ],
       "env": {
         "WORKSPACE_ROOT": "."
       }
+    },
+    "nix": {
+      "command": "nix",
+      "args": [
+        "run",
+        "github:utensils/mcp-nixos",
+        "--"
+      ]
+    },
+    "git": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-git",
+        "--stdio"
+      ]
     }
   }
 }
