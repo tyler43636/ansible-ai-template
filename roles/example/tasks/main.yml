@@ -3,28 +3,29 @@
   ansible.builtin.apt:
     update_cache: yes
     cache_valid_time: 3600
+  when: ansible_facts['os_family'] == "Debian"
 
 - name: Ensure example package is installed
-  ansible.builtin.apt:
+  ansible.builtin.package:
     name: "{{ example_package }}"
     state: present
 
 - name: Display system information
   ansible.builtin.debug:
     msg:
-      - "Hostname    : {{ ansible_hostname }}"
-      - "OS          : {{ ansible_distribution }} {{ ansible_distribution_version }}"
-      - "Kernel      : {{ ansible_kernel }}"
-      - "CPU count   : {{ ansible_processor_vcpus }}"
-      - "Total memory: {{ ansible_memtotal_mb }} MB"
+      - "Hostname    : {{ ansible_facts['hostname'] }}"
+      - "OS          : {{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }}"
+      - "Kernel      : {{ ansible_facts['kernel'] }}"
+      - "CPU count   : {{ ansible_facts['processor_vcpus'] }}"
+      - "Total memory: {{ ansible_facts['memtotal_mb'] }} MB"
 
 - name: Write system info report to disk
   ansible.builtin.copy:
     dest: "{{ sysinfo_report_path }}"
     content: |
-      hostname={{ ansible_hostname }}
-      os={{ ansible_distribution }} {{ ansible_distribution_version }}
-      kernel={{ ansible_kernel }}
-      cpu_count={{ ansible_processor_vcpus }}
-      memory_mb={{ ansible_memtotal_mb }}
+      hostname={{ ansible_facts['hostname'] }}
+      os={{ ansible_facts['distribution'] }} {{ ansible_facts['distribution_version'] }}
+      kernel={{ ansible_facts['kernel'] }}
+      cpu_count={{ ansible_facts['processor_vcpus'] }}
+      memory_mb={{ ansible_facts['memtotal_mb'] }}
     mode: "0644"

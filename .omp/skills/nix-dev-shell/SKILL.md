@@ -16,5 +16,5 @@ This repository uses Nix flakes and `direnv` to manage the local development she
 ## Workflow
 If the user asks for a new tool (e.g., "we need `terraform` for this playbook"):
 1. Search Nixpkgs to confirm the package name (or infer if standard).
-2. Use the `edit` tool to add the package to the `devShells.default` package list in `flake.nix`.
+2. Add the package to the `devShells.default` package list in `flake.nix`.
 3. Run `direnv reload` to materialize the package in the environment.
