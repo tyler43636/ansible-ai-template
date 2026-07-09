@@ -1,2 +1,8 @@
 ---
 # Default variables for the example role
+
+# Package to install as part of the example
+example_package: htop
+
+# Path where the system info report is written on the managed host
+sysinfo_report_path: /tmp/system_info.txt

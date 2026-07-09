@@ -6,3 +6,31 @@
     - name: Check that htop is installed
       ansible.builtin.command: which htop
       changed_when: false
+
+
+    - name: Check that system info report file exists
+      ansible.builtin.stat:
+        path: /tmp/system_info.txt
+      register: sysinfo_stat
+
+    - name: Assert report file exists
+      ansible.builtin.assert:
+        that:
+          - sysinfo_stat.stat.exists
+          - sysinfo_stat.stat.mode == "0644"
+        fail_msg: "System info report file is missing or has wrong permissions"
+
+    - name: Read system info report
+      ansible.builtin.slurp:
+        src: /tmp/system_info.txt
+      register: sysinfo_content
+
+    - name: Assert report contains expected keys
+      ansible.builtin.assert:
+        that:
+          - "'hostname=' in (sysinfo_content.content | b64decode)"
+          - "'os=' in (sysinfo_content.content | b64decode)"
+          - "'kernel=' in (sysinfo_content.content | b64decode)"
+          - "'cpu_count=' in (sysinfo_content.content | b64decode)"
+          - "'memory_mb=' in (sysinfo_content.content | b64decode)"
+        fail_msg: "System info report is missing expected fields"

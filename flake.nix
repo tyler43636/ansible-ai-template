@@ -15,11 +15,6 @@
       devShells = forAllSystems (system:
         let
           pkgs = pkgsFor system;
-          ansibleOmpSkills = pkgs.runCommand "ansible-omp-skills" { } ''
-            mkdir -p "$out"
-            cp -R ${./.pi/skills/ansible} "$out/ansible"
-          '';
-          oh-my-pi = pkgs.callPackage ./pkgs/oh-my-pi { };
         in
         {
           default = pkgs.mkShell {
@@ -44,7 +39,6 @@
             ];
 
             ANSIBLE_LOCALHOST_WARNING = "false";
-            OMP_SKILLS = "${ansibleOmpSkills}";
 
             shellHook = ''
               if [ -z "''${PUPPETEER_EXECUTABLE_PATH:-}" ] && command -v chromium >/dev/null; then
