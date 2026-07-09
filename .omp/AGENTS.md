@@ -129,10 +129,12 @@ This project has an Ansible MCP server configured in `.omp/mcp.json`. Use the `m
 
 ## Agent Skills
 
-Three project skills are available via `skill://`:
+Five project skills are available via `skill://`:
 - `skill://ansible` — Ansible role/playbook authoring, lint, and verification
 - `skill://molecule` — Molecule test scenario authoring and debugging
 - `skill://vault` — Ansible Vault encrypted secrets handling
+- `skill://nix-dev-shell` — Modifying the Nix development environment (`flake.nix`)
+- `skill://jinja2-templating` — Jinja2 template authoring rules and safety
 
 ## Prohibited Patterns
 
