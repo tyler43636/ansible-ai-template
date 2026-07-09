@@ -1,5 +1,5 @@
 ---
-- hosts: example
+- hosts: example-group
   become: true
   roles:
     - example

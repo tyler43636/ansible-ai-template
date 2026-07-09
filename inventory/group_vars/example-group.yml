@@ -1,0 +1,13 @@
+---
+# Variables specific to the 'example-group' group
+
+# This overrides the 'htop' default set in roles/example/defaults/main.yml
+# Demonstrates Ansible's variable precedence: group_vars > role defaults
+example_package: curl
+
+# Application-specific examples
+app_port: 8080
+enable_feature_x: true
+
+# Environment identifier
+environment_tier: staging

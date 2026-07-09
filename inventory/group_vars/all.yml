@@ -1,2 +1,5 @@
 ---
 # Shared variables for all hosts in the inventory
+
+# The default SSH user Ansible will use to connect to remote hosts
+ansible_user: deploy
