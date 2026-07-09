@@ -10,11 +10,8 @@ This template is designed from the ground up for agentic coding.
 The repository uses the native `.omp/` project configuration layout for zero-configuration AI capabilities:
 - **Skills** (`.omp/skills/`): Domain-specific knowledge for `ansible`, `molecule`, and `vault`. Automatically discovered by OMP when you enter the project.
 - **Agents** (`.omp/agents/`): Contains the `ansible-reviewer` custom agent specialized in reviewing Ansible roles for idempotency and style.
-- **MCP Server** (`.omp/mcp.json`): Configures an Ansible MCP server (`ansible-mcp-server`) that provides tools for the AI to ping hosts, run syntax checks, run playbooks, and list inventory. (Requires `npm install -g ansible-mcp-server`).
+- **MCP Server** (`.omp/mcp.json`): Configures an Ansible MCP server (`@ansible/ansible-mcp-server`) that provides tools for the AI to ping hosts, run syntax checks, run playbooks, and list inventory. Automatically runs via `npx` in the Nix shell.
 - **Rules & Context** (`.omp/RULES.md`, `.omp/AGENTS.md`): Automatically injected into the agent's context to enforce strict repository conventions.
-
-**Fallbacks**
-The template also provides `CLAUDE.md`, root `AGENTS.md`, and `.mcp.json` at the root as fallbacks for other AI assistants like Claude Code or Cursor.
 
 ## Quickstart
 
