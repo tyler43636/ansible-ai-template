@@ -53,12 +53,26 @@ ansible-playbook playbooks/example.yml --limit localhost
 # Target specific hosts with ad-hoc (use MCP tools when possible)
 ansible -m ping all --limit localhost
 
-# Lint YAML files
-ansible-lint playbooks/example.yml
+# REQUIRED before declaring any role/playbook change done
+ansible-lint playbooks/example.yml          # changed playbook
+ansible-lint roles/example                  # changed role
+ansible-lint                                # whole project (for cross-cutting changes)
 
 # Run molecule tests
 molecule test
 ```
+
+### Lint Gate
+
+`ansible-lint` MUST pass (exit 0) before any role or playbook change is considered done. Run it against the narrowest scope that covers the change:
+
+| What changed | Command |
+|---|---|
+| A playbook | `ansible-lint playbooks/<name>.yml` |
+| A role | `ansible-lint roles/<name>` |
+| Both / cross-cutting | `ansible-lint` (whole project) |
+
+Warnings are allowed; errors are not. Fix all errors before yielding.
 
 ## Ansible Best Practices
 

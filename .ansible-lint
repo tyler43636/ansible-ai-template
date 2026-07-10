@@ -1,0 +1,13 @@
+---
+profile: safety
+warn_list:
+  - yaml[line-length]
+skip_list:
+  - name[play] # playbooks/example.yml needs a play name
+  - var-naming[no-role-prefix] # roles/example/defaults/main.yml uses sysinfo_report_path
+  - yaml[truthy] # roles/example/tasks/main.yml uses yes instead of true
+  - yaml[new-line-at-end-of-file] # multiple files are missing a trailing newline
+exclude_paths:
+  - .git/
+  - molecule/
+offline: false

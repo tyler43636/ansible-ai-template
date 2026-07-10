@@ -46,13 +46,16 @@ Run the full test cycle with `molecule test` (dependency → destroy → syntax 
 
 ## Verification
 
-Prefer focused checks from the target Ansible project root:
+Run `ansible-lint` against every changed playbook or role. This is a **required gate** — do not declare work done until it exits 0.
 
 ```bash
-ansible-lint <changed playbook or role>
+ansible-lint <changed playbook or role path>   # narrowest scope
+ansible-lint                                   # whole project for cross-cutting changes
 ansible-playbook --syntax-check <playbook.yml>
 ansible-inventory --list
 molecule test
 ```
+
+Warnings are acceptable; non-zero exit (any error rule violation) is not. Fix all lint errors before yielding.
 
 For inventory-sensitive changes, run the narrowest safe command against the intended inventory and limit. Do not run destructive playbooks against real hosts without explicit approval.
