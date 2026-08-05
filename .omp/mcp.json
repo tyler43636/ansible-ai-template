@@ -13,8 +13,13 @@
       }
     },
     "nix": {
-      "command": "nix",
+      "command": "env",
       "args": [
+        "-u",
+        "LD_LIBRARY_PATH",
+        "-u",
+        "PYTHONPATH",
+        "nix",
         "run",
         "github:utensils/mcp-nixos",
         "--"
@@ -24,7 +29,7 @@
       "command": "npx",
       "args": [
         "-y",
-        "@modelcontextprotocol/server-git",
+        "@mseep/git-mcp-server",
         "--stdio"
       ]
     }
