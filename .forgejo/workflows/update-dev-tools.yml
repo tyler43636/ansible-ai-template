@@ -8,7 +8,7 @@ on:
 
 jobs:
   update-and-merge:
-    runs-on: ubuntu-latest
+    runs-on: archlinux/latest
     env:
       GITHUB_TOKEN: ${{ github.token }}
       GITHUB_API_URL: ${{ github.api_url }}
