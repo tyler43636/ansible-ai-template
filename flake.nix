@@ -78,6 +78,7 @@
               socat
               imagemagick
               oh-my-pi
+              just
             ];
 
             ANSIBLE_LOCALHOST_WARNING = "false";

@@ -1,0 +1,86 @@
+---
+name: Update Dev Tools
+
+on:
+  schedule:
+    - cron: '0 0 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-and-merge:
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+      GITHUB_API_URL: ${{ env.GITHUB_API_URL || github.api_url }}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v30
+        with:
+          extra_nix_config: |
+            experimental-features = nix-command flakes
+
+      - name: Run Updater
+        run: python3 scripts/update-dev-tools.py
+
+      - name: Commit & Push Changes
+        run: |
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "Dev tools are already up to date."
+            exit 0
+          fi
+          git config user.name "forgejo-bot"
+          git config user.email "bot@noreply.localhost"
+          git checkout -B bot/update-dev-tools
+          git add flake.nix flake.lock
+          git commit -m "chore(deps): automated dev tools and flake update"
+          git push -u origin bot/update-dev-tools --force
+
+      - name: Ensure Pull Request Exists
+        id: pr_check
+        run: |
+          PR_JSON=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" \
+            "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pulls?state=open")
+          PR_INDEX=$(echo "${PR_JSON}" | jq -r '
+            .[] | select(
+              .head.ref == "bot/update-dev-tools" or
+              .head.label == "'"${GITHUB_REPOSITORY_OWNER}"':bot/update-dev-tools"
+            ) | .number
+          ' | head -n1)
+
+          if [ -z "${PR_INDEX}" ] || [ "${PR_INDEX}" = "null" ]; then
+            echo "No open pull request found. Creating a new PR..."
+            NEW_PR=$(curl -s -X POST \
+              -H "Authorization: token ${GITHUB_TOKEN}" \
+              -H "Content-Type: application/json" \
+              -d '{
+                "title": "chore(deps): automated daily dev tools update",
+                "head": "bot/update-dev-tools",
+                "base": "main",
+                "body": "Automated update of oh-my-pi and flake inputs.\n\nWill be auto-merged upon test suite completion."
+              }' \
+              "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pulls")
+            PR_INDEX=$(echo "${NEW_PR}" | jq -r ".number")
+          fi
+
+          echo "PR_INDEX=${PR_INDEX}" >> $GITHUB_ENV
+          echo "Active PR number: ${PR_INDEX}"
+
+      - name: Execute Runner Validation
+        run: nix develop --command just test
+
+      - name: Automatically Merge Pull Request
+        run: |
+          if [ -z "${PR_INDEX}" ] || [ "${PR_INDEX}" = "null" ]; then
+            echo "Error: Valid PR_INDEX is missing."
+            exit 1
+          fi
+          curl -s -X POST \
+            -H "Authorization: token ${GITHUB_TOKEN}" \
+            -H "Content-Type: application/json" \
+            -d '{"Do": "merge", "MergeMessageField": "chore: auto-merge green dependency updates"}' \
+            "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pulls/${PR_INDEX}/merge"
