@@ -16,11 +16,17 @@ The repository uses the native `.omp/` project configuration layout for zero-con
 ## Quickstart
 
 1. **Enter the development shell** (requires [Nix](https://nixos.org/download/)):
+   From a local clone:
    ```bash
    nix develop
    ```
    Or if you use `direnv`, simply `direnv allow`.
-   The shell provides Ansible, Molecule, ansible-lint, and other required tooling.
+
+   To launch the toolchain directly from GitHub without cloning (in any working directory):
+   ```bash
+   nix develop github:tyler43636/ansible-ai-template
+   ```
+   The shell provides Ansible, Molecule, ansible-lint, language servers, and Oh My Pi (`omp`).
 
 2. **Install required collections**:
    ```bash
