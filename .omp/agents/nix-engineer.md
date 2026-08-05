@@ -1,5 +1,6 @@
 ---
 name: nix-engineer
+autoloadSkills: [nix-dev-shell]
 description: Manages the Nix flake, development shell, and reproducible environment configurations.
 ---
 

@@ -1,5 +1,6 @@
 ---
 name: security-auditor
+autoloadSkills: [vault, ansible, jinja2-templating]
 description: Audits Ansible roles and infrastructure code for secrets, permissions, and vulnerabilities.
 ---
 

@@ -10,7 +10,7 @@ This template is designed from the ground up for agentic coding.
 The repository uses the native `.omp/` project configuration layout for zero-configuration AI capabilities:
 - **Skills** (`.omp/skills/`): Domain-specific knowledge for `ansible`, `molecule`, `vault`, `nix-dev-shell`, and `jinja2-templating`. Automatically discovered by OMP when you enter the project.
 - **Agents** (`.omp/agents/`): Contains the `ansible-reviewer`, `security-auditor`, and `nix-engineer` custom agents specialized in reviewing Ansible roles, auditing security, and managing the Nix environment.
-- **MCP Server** (`.omp/mcp.json`): Configures an Ansible MCP server (`@ansible/ansible-mcp-server`) that provides tools for the AI to ping hosts, run syntax checks, run playbooks, and list inventory. Automatically runs via `npx` in the Nix shell.
+- **MCP Server** (`.omp/mcp.json`): Configures MCP servers bundling Ansible Development Tools (`@ansible/ansible-mcp-server`), Nix package intelligence (`@utensils/mcp-nixos`), and Git operations (`@mseep/git-mcp-server`). Automatically runs via `npx` in the Nix shell.
 - **Rules & Context** (`.omp/RULES.md`, `.omp/AGENTS.md`): Automatically injected into the agent's context to enforce strict repository conventions.
 
 ## Quickstart

@@ -1,5 +1,6 @@
 ---
 name: ansible-reviewer
+autoloadSkills: [ansible, molecule, jinja2-templating]
 description: Reviews Ansible roles, playbooks, and molecule tests for idempotency, style, and correctness.
 ---
 

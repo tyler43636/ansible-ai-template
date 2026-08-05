@@ -1,5 +1,6 @@
 ---
 name: ansible
+globs: ["playbooks/*.yml", "roles/**/*.yml", "inventory/**/*.yml", "ansible.cfg", "requirements.yml"]
 description: Develop, lint, and troubleshoot Ansible playbooks, roles, collections, inventories, and execution environments.
 ---
 
@@ -25,14 +26,12 @@ Use this skill when editing Ansible YAML, roles, collections, inventories, molec
 
 ## MCP Server
 
-This project configures an Ansible MCP server in `.mcp.json`. Prefer `mcp__ansible__*` tools over raw `ansible-playbook` bash calls when available:
+This project configures an Ansible MCP server in `.omp/mcp.json`. The `@ansible/ansible-mcp-server` integration provides development tools:
+- `mcp__ansible_content_best_practices` — best practices guidelines
+- `mcp__ansible_navigator` — run playbooks using ansible-navigator
+- `mcp__ansible_list_available_tools` — discovery of available ADT tools
 
-- `mcp__ansible__ping` — ping hosts to confirm connectivity
-- `mcp__ansible__run_playbook` — run a playbook against the configured inventory
-- `mcp__ansible__validate_playbook` — syntax-check without running
-- `mcp__ansible__inventory` — list inventory hosts and variables
-
-Fall back to `ansible-playbook` CLI only when the MCP server is unavailable or the required operation is not covered by the four tools above.
+Running playbooks, ad-hoc commands (`ansible -m ping`), syntax checking, and linting MUST use standard CLI tools via bash in the Nix dev shell (`ansible-lint`, `ansible-playbook --syntax-check`, `ansible-playbook --check`).
 
 ## Molecule
 

@@ -1,5 +1,6 @@
 ---
 name: molecule
+globs: ["molecule/**/*.yml", "molecule/**/*.yaml"]
 description: Author and debug Molecule test scenarios for Ansible roles using the Docker driver.
 ---
 

@@ -1,5 +1,6 @@
 ---
 name: jinja2-templating
+globs: ["roles/**/templates/*.j2", "**/*.j2"]
 description: Author robust, safe, and cleanly formatted Jinja2 templates for Ansible.
 ---
 

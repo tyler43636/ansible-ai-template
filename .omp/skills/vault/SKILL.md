@@ -1,5 +1,6 @@
 ---
 name: vault
+globs: ["group_vars/**/*.yml", "host_vars/**/*.yml", ".vault_pass"]
 description: Handle Ansible Vault encrypted strings and vault password files in this repository.
 ---
 

@@ -25,8 +25,7 @@ Ansible automation template repository. It provides a baseline structure with a 
 │       ├── files/
 │       └── defaults/main.yml
 ├── molecule/                # Molecule test scaffolding
-├── .omp/                    # OMP agent config (skills, agents, rules, MCP)
-└── .mcp.json                # Ansible MCP server (fallback; canonical is .omp/mcp.json)
+└── .omp/                    # OMP agent config (skills, agents, rules, MCP)
 ```
 
 ## Build/Lint/Test Commands
@@ -135,12 +134,10 @@ Scripts in `roles/<name>/files/` should:
 
 ## MCP Server
 
-This project has an Ansible MCP server configured in `.omp/mcp.json`. Use the `mcp__ansible__*` tools when available:
-- `mcp__ansible__ping` - ping hosts
-- `mcp__ansible__run_playbook` - run playbooks
-- `mcp__ansible__validate_playbook` - syntax check
-- `mcp__ansible__inventory` - list inventory
-
+This project configures three MCP servers in `.omp/mcp.json`:
+- `@ansible/ansible-mcp-server` (ADT/ADE tools): `mcp__ansible_list_available_tools`, `mcp__ansible_content_best_practices`, `mcp__ansible_navigator`, `mcp__ansible_ade_environment_info`, and `mcp__ansible_adt_check_env`. Notice that for syntax checks and linting, CLI commands (`ansible-lint`, `ansible-playbook --syntax-check`, `ansible -m ping`) are REQUIRED.
+- `@utensils/mcp-nixos`: `mcp__nix_nix` (query packages, NixOS options, flakes) and `mcp__nix_versions` (package commit history).
+- `@mseep/git-mcp-server`: `mcp__git_*` tools for structured Git repository operations.
 ## Agent Skills
 
 Five project skills are available via `skill://`:
