@@ -50,6 +50,9 @@
               fi
             '';
           };
+          omp-wrapped = pkgs.writeShellScriptBin "omp" ''
+            exec ${oh-my-pi}/bin/omp --plugin-dir="${self}/.omp" "$@"
+          '';
         in
         {
           default = pkgs.mkShell {
@@ -77,7 +80,7 @@
               tree
               socat
               imagemagick
-              oh-my-pi
+              omp-wrapped
               just
               shellcheck
               statix
