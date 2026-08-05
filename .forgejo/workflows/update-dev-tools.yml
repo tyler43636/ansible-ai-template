@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       GITHUB_TOKEN: ${{ github.token }}
-      GITHUB_API_URL: ${{ env.GITHUB_API_URL || github.api_url }}
+      GITHUB_API_URL: ${{ github.api_url }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
