@@ -10,9 +10,15 @@ install:
 syntax: install
     ansible-playbook --syntax-check playbooks/*.yml
     ansible-inventory --list
+    pyright scripts/
+    find . -type f -name "*.nix" -not -path "*/.*" -not -path "*/nix/store/*" -exec nix-instantiate --parse {} + >/dev/null
+    find . -type f -name "*.sh" -not -path "*/.*" -exec bash -n {} +
 
 lint: install
     ansible-lint
+    ruff check scripts/
+    statix check .
+    find . -type f -name "*.sh" -not -path "*/.*" -exec shellcheck {} +
 
 molecule: install
     molecule test

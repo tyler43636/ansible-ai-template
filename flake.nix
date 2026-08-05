@@ -79,6 +79,8 @@
               imagemagick
               oh-my-pi
               just
+              shellcheck
+              statix
             ];
 
             ANSIBLE_LOCALHOST_WARNING = "false";

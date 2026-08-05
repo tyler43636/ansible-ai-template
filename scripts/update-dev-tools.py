@@ -7,6 +7,7 @@ import json
 import re
 import subprocess
 import sys
+import urllib.error
 import urllib.request
 from pathlib import Path
 
@@ -34,7 +35,7 @@ def get_latest_version():
         with urllib.request.urlopen(req) as resp:
             data = json.loads(resp.read().decode())
             return data["tag_name"]
-    except Exception as exc:
+    except (urllib.error.URLError, ValueError, KeyError) as exc:
         sys.exit(f"Error fetching latest release from GitHub API: {exc}")
 
 
@@ -126,7 +127,7 @@ def update_omp(flake_path: Path, target_ver: str | None = None, force: bool = Fa
         print(f"\nSuccessfully updated {flake_path} to {target_ver}.")
         return True
 
-    except Exception as exc:
+    except (OSError, RuntimeError, ValueError) as exc:
         sys.exit(f"Error updating oh-my-pi: {exc}")
 
 
@@ -135,7 +136,7 @@ def update_flake_inputs(flake_path: Path) -> None:
     try:
         subprocess.run(["nix", "flake", "update"], cwd=str(flake_path.parent), check=True)
         print("Successfully updated flake inputs in flake.lock.")
-    except (subprocess.CalledProcessError, Exception) as exc:
+    except (subprocess.CalledProcessError, OSError) as exc:
         sys.exit(f"Error updating flake inputs: {exc}")
 
 
