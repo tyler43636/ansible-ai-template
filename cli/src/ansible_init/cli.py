@@ -25,6 +25,15 @@ def main():
         out_dir = args.dir or f"./{name}"
         preset_name = args.preset or "minimal"
         
+        if preset_name not in PRESETS:
+            print(f"Error: Invalid preset '{preset_name}'. Available: {', '.join(PRESETS.keys())}")
+            sys.exit(1)
+            
+        out_path = Path(out_dir)
+        if out_path.exists() and any(out_path.iterdir()) and not args.force:
+            print(f"Error: Directory {out_dir} exists and is not empty. Use --force to overwrite.")
+            sys.exit(1)
+        
         context = {
             "project_name": name,
             "preset": preset_name,
@@ -32,11 +41,18 @@ def main():
             "molecule_enabled": args.molecule,
             "molecule_driver": args.molecule_driver or "docker",
             "git_enabled": args.git,
-            "collections": PRESETS[preset_name].collections if preset_name in PRESETS else ["community.general"],
+            "collections": PRESETS[preset_name].collections,
         }
         
         if args.dry_run:
-            print(f"Dry run successful for {name}")
+            import tempfile
+            import shutil
+            temp_dir = tempfile.mkdtemp()
+            try:
+                render_project(context, temp_dir)
+                print(f"Dry run successful for {name}")
+            finally:
+                shutil.rmtree(temp_dir)
             return
             
         render_project(context, out_dir)

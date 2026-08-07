@@ -2,7 +2,7 @@
 dependency:
   name: galaxy
 driver:
-  name: docker
+  name: {{ molecule_driver }}
 platforms:
   - name: instance
     image: geerlingguy/docker-ubuntu2404-ansible:latest
