@@ -1,0 +1,71 @@
+# {{ project_name }}
+
+Ansible project scaffolded with [ansible-init](https://github.com/tyler43636/ansible-ai-template).
+
+## Getting Started
+
+### Prerequisites
+
+- [Nix](https://nixos.org/download/) with flakes enabled
+- [direnv](https://direnv.net/) (recommended) or run `nix develop github:tyler43636/ansible-ai-template` manually
+
+### Setup
+
+1. **Enter the development shell:**
+   ```bash
+   direnv allow    # if using direnv
+   # OR
+   nix develop github:tyler43636/ansible-ai-template
+   ```
+
+2. **Install required collections:**
+   ```bash
+   just install
+   ```
+{% if vault_enabled %}
+
+3. **Vault password:**
+   A `.vault_pass` file was generated during scaffolding. Replace its contents with your actual vault password. Never commit this file.
+{% endif %}
+
+## Usage
+
+```bash
+# Lint all playbooks and roles
+just lint
+
+# Syntax check
+just syntax
+{% if molecule_enabled %}
+
+# Run Molecule tests
+just molecule
+
+# Full test suite
+just test
+{% endif %}
+```
+
+## Updating the dev shell
+
+```bash
+just self-update
+```
+
+## Structure
+
+```
+.
+├── ansible.cfg
+├── inventory/
+│   ├── hosts.yml
+│   └── group_vars/all.yml
+├── playbooks/
+├── roles/
+{% if molecule_enabled %}
+├── molecule/
+{% endif %}
+├── justfile
+├── .envrc
+└── .omp/
+```

@@ -1,8 +1,0 @@
----
-# Variables applied to the prod environment
-
-environment_tier: prod
-debug_mode: false
-
-# High availability settings for prod
-enable_backups: true

@@ -1,0 +1,6 @@
+---
+- name: Provision and Harden Servers
+  hosts: all
+  become: true
+  roles:
+    - hardening

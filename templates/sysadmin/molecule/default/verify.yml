@@ -1,0 +1,17 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Load role defaults
+      ansible.builtin.include_vars:
+        file: ../../roles/hardening/defaults/main.yml
+
+    - name: Verify SSH root login setting
+      ansible.builtin.command: grep -q "^PermitRootLogin {{ hardening_allow_root_login }}$" /etc/ssh/sshd_config
+      changed_when: false
+
+    - name: Verify SSH port setting
+      ansible.builtin.command: grep -q "^Port {{ hardening_ssh_port }}$" /etc/ssh/sshd_config
+      changed_when: false

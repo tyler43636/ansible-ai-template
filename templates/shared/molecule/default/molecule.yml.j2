@@ -1,0 +1,15 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: {{ molecule_driver }}
+platforms:
+  - name: instance
+    image: geerlingguy/docker-ubuntu2404-ansible:latest
+    pre_build_image: true
+provisioner:
+  name: ansible
+  env:
+    ANSIBLE_ROLES_PATH: "../../roles"
+verifier:
+  name: ansible

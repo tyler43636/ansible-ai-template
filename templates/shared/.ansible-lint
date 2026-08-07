@@ -1,0 +1,8 @@
+---
+profile: safety
+warn_list:
+  - yaml[line-length]
+exclude_paths:
+  - .git/
+  - molecule/
+offline: false

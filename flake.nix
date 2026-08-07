@@ -53,6 +53,22 @@
           omp-wrapped = pkgs.writeShellScriptBin "omp" ''
             exec ${oh-my-pi}/bin/omp --plugin-dir="${self}/.omp" "$@"
           '';
+          ansible-init = pkgs.python3Packages.buildPythonApplication {
+            pname = "ansible-init";
+            version = "0.1.0";
+            src = ./cli;
+            format = "pyproject";
+            build-system = [ pkgs.python3Packages.setuptools ];
+            propagatedBuildInputs = [ pkgs.python3Packages.jinja2 ];
+          };
+          ansible-init-wrapped = pkgs.writeShellScriptBin "ansible-init" ''
+            export ANSIBLE_INIT_TEMPLATE_DIR="${self}/templates"
+            exec ${ansible-init}/bin/ansible-init "$@"
+          '';
+          molecule-init-wrapped = pkgs.writeShellScriptBin "molecule-init" ''
+            export ANSIBLE_INIT_TEMPLATE_DIR="${self}/templates"
+            exec ${ansible-init}/bin/molecule-init "$@"
+          '';
         in
         {
           default = pkgs.mkShell {
@@ -81,6 +97,8 @@
               socat
               imagemagick
               omp-wrapped
+              molecule-init-wrapped
+              ansible-init-wrapped
               just
               shellcheck
               statix

@@ -1,68 +1,49 @@
-# Ansible AI Template
+# ansible-ai-template (ansible-init)
 
-A clone-and-go starting point for any Ansible project, bundled with a Nix dev shell that provides the full Ansible toolchain, a best-practices project skeleton, and Molecule test scaffolding.
+A Nix-powered Ansible project scaffolder with an AI-native development environment. 
 
-## AI Agent Integration
-
-This template is designed from the ground up for agentic coding. 
-
-**Oh My Pi (OMP) Native Support**
-The repository uses the native `.omp/` project configuration layout for zero-configuration AI capabilities:
-- **Skills** (`.omp/skills/`): Domain-specific knowledge for `ansible`, `molecule`, `vault`, `nix-dev-shell`, and `jinja2-templating`. Automatically discovered by OMP when you enter the project.
-- **Agents** (`.omp/agents/`): Contains the `ansible-reviewer`, `security-auditor`, and `nix-engineer` custom agents specialized in reviewing Ansible roles, auditing security, and managing the Nix environment.
-- **MCP Server** (`.omp/mcp.json`): Configures MCP servers bundling Ansible Development Tools (`@ansible/ansible-mcp-server`), Nix package intelligence (`@utensils/mcp-nixos`), and Git operations (`@mseep/git-mcp-server`). Automatically runs via `npx` in the Nix shell.
-- **Rules & Context** (`.omp/RULES.md`, `.omp/AGENTS.md`): Automatically injected into the agent's context to enforce strict repository conventions.
+`ansible-init` is an interactive Python CLI that rapidly generates new Ansible projects complete with a pre-configured, reproducible toolchain.
 
 ## Quickstart
 
-1. **Enter the development shell** (requires [Nix](https://nixos.org/download/)):
-   From a local clone:
-   ```bash
-   nix develop
-   ```
-   Or if you use `direnv`, simply `direnv allow`.
-
-   To launch the toolchain directly from GitHub without cloning (in any working directory):
-   ```bash
-   nix develop github:tyler43636/ansible-ai-template
-   ```
-   The shell provides Ansible, Molecule, ansible-lint, language servers, and Oh My Pi (`omp`).
-
-2. **Install required collections**:
-   ```bash
-   ansible-galaxy collection install -r requirements.yml
-   ```
-
-3. **Initialize Vault (Optional)**:
-   The project is configured to use `.vault_pass` for Ansible Vault. Create it before running playbooks that require encrypted variables:
-   ```bash
-   echo 'your_vault_password' > .vault_pass
-   chmod 600 .vault_pass
-   ```
-
-4. **Run the example playbook** against the local testing inventory:
-   ```bash
-   ansible-playbook playbooks/example.yml
-   ```
-
-## Testing with Molecule
-
-The project includes scaffolding for molecule tests using Docker. Molecule will spin up an isolated container, apply the role, verify idempotency, and run assertions.
+To run the scaffolder from anywhere without installing anything (requires Nix with flakes):
 
 ```bash
-molecule test
+nix develop github:tyler43636/ansible-ai-template --command ansible-init
 ```
-*(Requires the Docker daemon to be running on your host)*
 
-## Structure
+Follow the interactive prompts to create your project. Once scaffolded, simply enter the directory and `direnv allow` (or `nix develop`) to enter the fully configured environment.
 
-```
-.
-├── ansible.cfg              # Ansible configuration
-├── flake.nix                # Nix dev shell and dependencies
-├── inventory/               # Host definitions and group_vars
-├── playbooks/               # Playbooks mapping hosts to roles
-├── roles/                   # Modular Ansible roles
-├── molecule/                # Docker-based testing scenarios
-└── .omp/                    # Native config for Oh My Pi (Agents, Skills, MCP)
-```
+## Available Presets
+
+| Preset | Description | Status |
+|--------|-------------|--------|
+| **minimal** | Empty skeleton with `community.general` — perfect for greenfield projects. | Available |
+| **homelab** | Application deployment with Docker roles and backup scaffolding. | *Coming Soon (Phase 2)* |
+| **sysadmin** | Enterprise Linux fleet management with hardening and compliance. | *Coming Soon (Phase 2)* |
+
+## What's Included
+
+When you scaffold a project, you receive:
+- **Reproducible Environment**: A `flake.nix` driven `nix develop` shell.
+- **Ansible Tools**: `ansible`, `ansible-lint`, `molecule`.
+- **Language Servers**: `ansible-language-server`, `yaml-language-server`, `bash-language-server`, `pyright`, `ruff`, `marksman`.
+- **Task Runner**: A `justfile` with standard recipes (`just install`, `just lint`, `just test`).
+- **AI Integration**: A `.omp/` directory customized for Oh My Pi, pre-loaded with specialized agent skills (Ansible, Molecule, Vault, Nix, Jinja2).
+
+## Developing the Scaffolder
+
+If you want to hack on `ansible-init` itself:
+
+1. Clone this repository and enter the shell:
+   ```bash
+   git clone https://github.com/tyler43636/ansible-ai-template.git
+   cd ansible-ai-template
+   direnv allow
+   ```
+
+2. Available `just` recipes:
+   - `just run` - Run the CLI locally.
+   - `just lint` - Lint the Python CLI code.
+   - `just test` - Run CLI tests.
+   - `just validate-templates` - Dry-run rendering test for templates.

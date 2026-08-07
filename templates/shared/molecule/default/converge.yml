@@ -1,0 +1,8 @@
+---
+- name: Converge
+  hosts: all
+  become: true
+  tasks:
+    - name: Placeholder for role convergence
+      ansible.builtin.debug:
+        msg: "Add roles to this play as you create them."

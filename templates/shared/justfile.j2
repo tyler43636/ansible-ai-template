@@ -1,0 +1,33 @@
+set shell := ["bash", "-c"]
+
+default:
+    @just --list
+
+install:
+    ansible-galaxy collection install -r requirements.yml
+{% if vault_enabled %}
+    if [ ! -f .vault_pass ]; then echo 'dummy_vault_pass_for_ci_testing' > .vault_pass && chmod 600 .vault_pass; fi
+{% endif %}
+
+syntax: install
+    @if find playbooks -name '*.yml' -print -quit 2>/dev/null | grep -q .; then ansible-playbook --syntax-check playbooks/*.yml; fi
+    ansible-inventory --list
+
+lint: install
+    ansible-lint
+{% if molecule_enabled %}
+
+molecule: install
+    molecule test
+
+test: lint syntax molecule
+{% else %}
+
+test: lint syntax
+{% endif %}
+
+self-update:
+    @echo "Updating dev shell to latest version..."
+    @# direnv caches the flake evaluation; touching .envrc forces re-evaluation
+    touch .envrc
+    @echo "Run 'direnv reload' or re-enter 'nix develop github:tyler43636/ansible-ai-template'"

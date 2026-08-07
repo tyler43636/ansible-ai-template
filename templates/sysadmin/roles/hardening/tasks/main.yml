@@ -1,0 +1,27 @@
+---
+- name: Ensure SSH server is installed
+  ansible.builtin.apt:
+    name: openssh-server
+    state: present
+    update_cache: true
+
+- name: Ensure privilege separation directory exists (for testing)
+  ansible.builtin.file:
+    path: /run/sshd
+    state: directory
+    mode: '0755'
+- name: Configure SSH daemon
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#?PermitRootLogin"
+    line: "PermitRootLogin {{ hardening_allow_root_login }}"
+    validate: "/usr/sbin/sshd -t -f %s"
+  notify: Restart SSH
+
+- name: Ensure SSH runs on configured port
+  ansible.builtin.lineinfile:
+    path: /etc/ssh/sshd_config
+    regexp: "^#?Port"
+    line: "Port {{ hardening_ssh_port }}"
+    validate: "/usr/sbin/sshd -t -f %s"
+  notify: Restart SSH

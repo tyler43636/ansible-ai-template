@@ -1,0 +1,3 @@
+---
+hardening_ssh_port: "22"
+hardening_allow_root_login: "no"

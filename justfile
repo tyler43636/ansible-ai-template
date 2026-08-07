@@ -3,24 +3,19 @@ set shell := ["bash", "-c"]
 default:
     @just --list
 
-install:
-    ansible-galaxy collection install -r requirements.yml
-    if [ ! -f .vault_pass ]; then echo 'dummy_vault_pass_for_ci_testing' > .vault_pass && chmod 600 .vault_pass; fi
+# Run the CLI locally for testing
+run *ARGS:
+    python -m ansible_init {{ARGS}}
 
-syntax: install
-    ansible-playbook --syntax-check playbooks/*.yml
-    ansible-inventory --list
-    pyright scripts/
-    find . -type f -name "*.nix" -not -path "*/.*" -not -path "*/nix/store/*" -exec nix-instantiate --parse {} + >/dev/null
-    find . -type f -name "*.sh" -not -path "*/.*" -exec bash -n {} +
+# Lint the CLI code
+lint:
+    ruff check cli/
+    pyright cli/
 
-lint: install
-    ansible-lint
-    ruff check scripts/
-    statix check .
-    find . -type f -name "*.sh" -not -path "*/.*" -exec shellcheck {} +
+# Run CLI tests
+test:
+    python -m pytest cli/tests/ -v
 
-molecule: install
-    molecule test
-
-test: lint syntax molecule
+# Validate all templates render without error
+validate-templates:
+    python -m ansible_init --dry-run --preset minimal --name test-project

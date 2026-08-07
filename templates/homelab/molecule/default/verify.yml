@@ -1,0 +1,20 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  gather_facts: false
+  tasks:
+    - name: Load role defaults
+      ansible.builtin.include_vars:
+        file: ../../roles/docker_app/defaults/main.yml
+
+    - name: Check if container is running
+      ansible.builtin.command: docker inspect -f {% raw %}'{{.State.Running}}'{% endraw %} "{{ docker_app_name }}"
+      register: container_state
+      changed_when: false
+      failed_when: container_state.stdout | trim != 'true'
+
+    - name: Verify application is responding
+      ansible.builtin.uri:
+        url: "http://localhost:{{ docker_app_port }}"
+        status_code: 200

@@ -1,0 +1,8 @@
+---
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: Placeholder for verify assertions
+      ansible.builtin.debug:
+        msg: "Add verify tasks as you build roles."

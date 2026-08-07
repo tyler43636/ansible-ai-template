@@ -1,0 +1,21 @@
+---
+- name: Ensure Docker is installed
+  ansible.builtin.apt:
+    name: docker.io
+    state: present
+    update_cache: true
+
+- name: Start Docker service
+  ansible.builtin.service:
+    name: docker
+    state: started
+    enabled: true
+
+- name: Run application container
+  community.docker.docker_container:
+    name: "{{ docker_app_name }}"
+    image: "{{ docker_app_image }}"
+    state: started
+    ports:
+      - "{{ docker_app_port }}:80"
+    restart_policy: always

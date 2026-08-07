@@ -1,0 +1,6 @@
+---
+- name: Deploy Homelab Services
+  hosts: all
+  become: true
+  roles:
+    - docker_app

@@ -1,8 +1,0 @@
-.vault_pass
-*.retry
-__pycache__
-.direnv
-result
-# OMP project config is committed
-!.omp/
-.ansible/

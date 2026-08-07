@@ -1,0 +1,4 @@
+---
+docker_app_name: "hello-world"
+docker_app_image: "nginxdemos/hello:latest"
+docker_app_port: "8080"
