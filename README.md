@@ -19,8 +19,19 @@ Follow the interactive prompts to create your project. Once scaffolded, simply e
 | Preset | Description | Status |
 |--------|-------------|--------|
 | **minimal** | Empty skeleton with `community.general` — perfect for greenfield projects. | Available |
-| **homelab** | Application deployment with Docker roles and backup scaffolding. | *Coming Soon (Phase 2)* |
-| **sysadmin** | Enterprise Linux fleet management with hardening and compliance. | *Coming Soon (Phase 2)* |
+| **homelab** | Application deployment with Docker roles and backup scaffolding. | Available |
+| **sysadmin** | Enterprise Linux fleet management with hardening and compliance. | Available |
+
+## Molecule Test Scaffolding
+
+If you have an existing Ansible project or role and want to inject Molecule testing into it, you can use the `molecule-init` tool:
+
+```bash
+cd my-existing-project
+nix develop github:tyler43636/ansible-ai-template --command molecule-init
+```
+
+This will prompt you for your preferred driver (Docker or Podman) and render the `molecule/` directory structure directly into your current working directory without overwriting your existing files.
 
 ## What's Included
 
