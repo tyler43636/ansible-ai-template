@@ -77,6 +77,8 @@
               ansible
               ansible-lint
               ansible-language-server
+              ansible-navigator
+              ansible-builder
               nodejs
               molecule
               pre-commit
@@ -90,6 +92,7 @@
                 requests
                 pytz
                 docker
+                pytest-ansible
               ]))
               jq
               yq-go
