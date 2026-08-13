@@ -1,0 +1,21 @@
+# Nix
+.direnv/
+result
+result-*
+
+# Ansible
+.ansible/
+.vault_pass
+*.retry
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.pytest_cache/
+.coverage
+.ruff_cache/
+
+# Logs
+*.log
