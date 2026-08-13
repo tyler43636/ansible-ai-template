@@ -11,6 +11,7 @@ jobs:
     runs-on: archlinux/latest
     env:
       GITHUB_TOKEN: ${{ github.token }}
+      FJ_TOKEN: ${{ secrets.FJ_TOKEN }}
       GITHUB_API_URL: ${{ github.api_url }}
     steps:
       - name: Checkout repository
@@ -41,13 +42,20 @@ jobs:
           git checkout -B bot/update-dev-tools
           git add flake.nix flake.lock
           git commit -m "chore(deps): automated dev tools and flake update"
+
+          if [ -n "$FJ_TOKEN" ]; then
+            git config --local --unset-all http.https://git.cassieandtyler.com/.extraheader || true
+            git remote set-url origin "https://token:${FJ_TOKEN}@git.cassieandtyler.com/${GITHUB_REPOSITORY}.git"
+          fi
+
           git push -u origin bot/update-dev-tools --force
 
       - name: Ensure Pull Request Exists
         id: pr_check
         if: steps.commit.outputs.changed == 'true'
         run: |
-          PR_JSON=$(curl -s -H "Authorization: token ${GITHUB_TOKEN}" \
+          AUTH_TOKEN="${FJ_TOKEN:-$GITHUB_TOKEN}"
+          PR_JSON=$(curl -s -H "Authorization: token ${AUTH_TOKEN}" \
             "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pulls?state=open")
           PR_INDEX=$(echo "${PR_JSON}" | jq -r '
             .[] | select(
@@ -59,7 +67,7 @@ jobs:
           if [ -z "${PR_INDEX}" ] || [ "${PR_INDEX}" = "null" ]; then
             echo "No open pull request found. Creating a new PR..."
             NEW_PR=$(curl -s -X POST \
-              -H "Authorization: token ${GITHUB_TOKEN}" \
+              -H "Authorization: token ${AUTH_TOKEN}" \
               -H "Content-Type: application/json" \
               -d '{
                 "title": "chore(deps): automated daily dev tools update",
@@ -90,8 +98,9 @@ jobs:
             echo "Error: Valid PR_INDEX is missing."
             exit 1
           fi
+          AUTH_TOKEN="${FJ_TOKEN:-$GITHUB_TOKEN}"
           curl -s -X POST \
-            -H "Authorization: token ${GITHUB_TOKEN}" \
+            -H "Authorization: token ${AUTH_TOKEN}" \
             -H "Content-Type: application/json" \
             -d '{"Do": "merge", "MergeMessageField": "chore: auto-merge green dependency updates"}' \
             "${GITHUB_API_URL}/repos/${GITHUB_REPOSITORY}/pulls/${PR_INDEX}/merge"
