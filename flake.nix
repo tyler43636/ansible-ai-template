@@ -51,7 +51,11 @@
             '';
           };
           omp-wrapped = pkgs.writeShellScriptBin "omp" ''
-            exec ${oh-my-pi}/bin/omp --plugin-dir="${self}/.omp" "$@"
+            args=("--plugin-dir=${self}/.omp")
+            if [ -d "$PWD/.omp" ]; then
+              args+=("--plugin-dir=$PWD/.omp")
+            fi
+            exec ${oh-my-pi}/bin/omp "''${args[@]}" "$@"
           '';
           ansible-init = pkgs.python3Packages.buildPythonApplication {
             pname = "ansible-init";

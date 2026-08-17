@@ -5,6 +5,31 @@
       "args": ["--stdio"],
       "fileTypes": [".yml", ".yaml"],
       "rootMarkers": ["ansible.cfg", "playbooks", "roles"]
+    },
+    "yaml-language-server": {
+      "command": "yaml-language-server",
+      "args": ["--stdio"],
+      "fileTypes": [".yml", ".yaml"]
+    },
+    "bash-language-server": {
+      "command": "bash-language-server",
+      "args": ["start"],
+      "fileTypes": [".sh", ".bash"]
+    },
+    "nixd": {
+      "command": "nixd",
+      "args": [],
+      "fileTypes": [".nix"]
+    },
+    "marksman": {
+      "command": "marksman",
+      "args": ["server"],
+      "fileTypes": [".md", ".markdown"]
+    },
+    "pyright": {
+      "command": "pyright-langserver",
+      "args": ["--stdio"],
+      "fileTypes": [".py"]
     }
   }
 }
