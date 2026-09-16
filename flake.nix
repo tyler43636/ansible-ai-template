@@ -9,7 +9,7 @@
     let
       supportedSystems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
       forAllSystems = nixpkgs.lib.genAttrs supportedSystems;
-      pkgsFor = system: import nixpkgs { inherit system; };
+      pkgsFor = system: import nixpkgs { inherit system; config.allowUnfree = true; };
     in
     {
       devShells = forAllSystems (system:
@@ -97,12 +97,19 @@
                 pytz
                 docker
                 pytest-ansible
+                molecule-plugins
+                hvac
               ]))
               jq
               yq-go
               tree
               socat
-              imagemagick
+              docker-client
+              openssh
+              libvirt
+              vault
+              (terraform.withPlugins (p: [ p.dmacvicar_libvirt ]))
+              terraform-ls
               omp-wrapped
               molecule-init-wrapped
               ansible-init-wrapped
