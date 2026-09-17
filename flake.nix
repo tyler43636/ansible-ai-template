@@ -110,6 +110,7 @@
               vault
               (terraform.withPlugins (p: [ p.dmacvicar_libvirt ]))
               terraform-ls
+              tflint
               omp-wrapped
               molecule-init-wrapped
               ansible-init-wrapped
