@@ -80,10 +80,13 @@
           # the sole collection installation path for a consumer project.
           python = pkgs.python3.override {
             packageOverrides = pyFinal: pyPrev: {
-              "ansible-core" = pyPrev."ansible-core".overrideAttrs (old: {
+              "ansible-core" = pyPrev."ansible-core".overridePythonAttrs (old: {
+                dependencies = pkgs.lib.filter
+                  (package: package != pyPrev.ansible)
+                  (old.dependencies or [ ]);
                 propagatedBuildInputs = pkgs.lib.filter
                   (package: package != pyPrev.ansible)
-                  old.propagatedBuildInputs;
+                  (old.propagatedBuildInputs or [ ]);
               });
               # ansible-compat relies on jsonschema through the removed meta
               # distribution instead of declaring it directly.
@@ -133,7 +136,7 @@
               marksman
               pyright
               ruff
-              (python3.withPackages (ps: with ps; [
+              (python.withPackages (ps: with ps; [
                 requests
                 pytz
                 docker
