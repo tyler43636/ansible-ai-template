@@ -70,6 +70,15 @@
               "ansible-compat" = pyPrev."ansible-compat".overrideAttrs (old: {
                 propagatedBuildInputs = old.propagatedBuildInputs ++ [ pyFinal.jsonschema ];
               });
+              yamllint = pyPrev.yamllint.overridePythonAttrs (old: rec {
+                version = "1.38.0";
+                src = pkgs.fetchFromGitHub {
+                  owner = "adrienverge";
+                  repo = "yamllint";
+                  rev = "v${version}";
+                  hash = "sha256-4H8tbn2TRzTGIXmP9Hnmc93rGSLsWh5A5R9KAIz0mKM=";
+                };
+              });
             };
           };
           ansible = python.pkgs.toPythonApplication python.pkgs."ansible-core";
