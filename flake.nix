@@ -73,6 +73,38 @@
             export ANSIBLE_INIT_TEMPLATE_DIR="${self}/templates"
             exec ${ansible-init}/bin/molecule-init "$@"
           '';
+          # ansible-core currently propagates the complete `ansible` Python
+          # distribution. That reverses the normal dependency direction and
+          # makes tools discover immutable bundled collections in addition to
+          # the writable Galaxy location. Remove that propagation so Galaxy is
+          # the sole collection installation path for a consumer project.
+          python = pkgs.python3.override {
+            packageOverrides = pyFinal: pyPrev: {
+              "ansible-core" = pyPrev."ansible-core".overrideAttrs (old: {
+                propagatedBuildInputs = pkgs.lib.filter
+                  (package: package != pyPrev.ansible)
+                  old.propagatedBuildInputs;
+              });
+              # ansible-compat relies on jsonschema through the removed meta
+              # distribution instead of declaring it directly.
+              "ansible-compat" = pyPrev."ansible-compat".overrideAttrs (old: {
+                propagatedBuildInputs = old.propagatedBuildInputs ++ [ pyFinal.jsonschema ];
+              });
+            };
+          };
+          ansible = python.pkgs.toPythonApplication python.pkgs."ansible-core";
+          ansible-lint = pkgs.callPackage
+            (pkgs.path + "/pkgs/by-name/an/ansible-lint/package.nix")
+            {
+              python3Packages = python.pkgs;
+              inherit ansible;
+            };
+          molecule = python.pkgs.molecule;
+          ansible-navigator = pkgs.callPackage
+            (pkgs.path + "/pkgs/by-name/an/ansible-navigator/package.nix")
+            {
+              inherit ansible-lint;
+            };
         in
         {
           default = pkgs.mkShell {
