@@ -15,7 +15,7 @@
       devShells = forAllSystems (system:
         let
           pkgs = pkgsFor system;
-          ompVersion = "v18.11.3";
+          ompVersion = "v18.12.1";
           ompPlatform =
             if system == "x86_64-linux" then "linux-x64"
             else if system == "aarch64-linux" then "linux-arm64"
@@ -23,10 +23,10 @@
             else if system == "aarch64-darwin" then "darwin-arm64"
             else throw "Unsupported system: ${system}";
           ompHash =
-            if system == "x86_64-linux" then "02idpiq9l3xk5gh2640gmvycwnfddid6bmmis05xgq0cigqbbyq1"
-            else if system == "aarch64-linux" then "1fhc2wajirn4b6779jinilh9jnhj714786f66wx019rk6smz9763"
-            else if system == "x86_64-darwin" then "0fkvs2cf5bc5fiwhjs2in2kakv7wg0rq0fr84b2a85fhp7wimxa2"
-            else if system == "aarch64-darwin" then "0ayh0ci1miip7g09aqvndncn39w98kikhb9zbhn7likxch6k266m"
+            if system == "x86_64-linux" then "1cqv38chch50l79n0zc0h103slgifrsaj7z3paaximqnwq0i860n"
+            else if system == "aarch64-linux" then "14vahazr2rfzn04pnxj4x73ivp0j9zr67k9bdz3dncbvfiz5sm0n"
+            else if system == "x86_64-darwin" then "1xx0yr695c6m6kahwxb57iq7psyzm45jjfpw40fyk96l9xdcvbzz"
+            else if system == "aarch64-darwin" then "1ids4hfrf6f1awxg5z89qk01zsvk1znrqkryf6dyk0238dyv4hgs"
             else "";
           oh-my-pi = pkgs.stdenv.mkDerivation {
             pname = "oh-my-pi";
