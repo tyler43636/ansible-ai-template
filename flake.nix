@@ -31,7 +31,6 @@
           oh-my-pi = pkgs.stdenv.mkDerivation {
             pname = "oh-my-pi";
             nativeBuildInputs = pkgs.lib.optionals pkgs.stdenv.isLinux [ pkgs.patchelf ];
-            buildInputs = pkgs.lib.optionals pkgs.stdenv.isLinux [ pkgs.stdenv.cc.cc.lib ];
             version = ompVersion;
             src = pkgs.fetchurl {
               url = "https://github.com/can1357/oh-my-pi/releases/download/${ompVersion}/omp-${ompPlatform}";
@@ -43,9 +42,10 @@
               mkdir -p $out/bin
               cp $src $out/bin/omp
               chmod u+wx $out/bin/omp
+              # Only set the interpreter: omp needs nothing beyond glibc, and
+              # --set-rpath corrupts the Bun-compiled binary (segfaults since v18.12).
               if [ -f "${pkgs.stdenv.cc}/nix-support/dynamic-linker" ]; then
                 patchelf --set-interpreter "$(cat ${pkgs.stdenv.cc}/nix-support/dynamic-linker)" \
-                         --set-rpath "${pkgs.lib.makeLibraryPath [ pkgs.stdenv.cc.cc.lib ]}" \
                          $out/bin/omp
               fi
             '';
